@@ -1,19 +1,30 @@
-.section .text      
+.section .text
 .align 2
-.globl asm_main 
+.globl asm_main
 
-.equ offset, 0x80000000
-.equ data,   0xDEADBEEF
-# add program code here
+# Part 5: Demonstrate jump-and-link (jal) and return (jalr via ret)
+# Two addresses are treated as memory locations to be modified by a subroutine.
+
+.equ value1, 0x80000000     # treated as an address
+.equ value2, 0x80000004     # treated as an address
+
 asm_main:
-   li a1, data             # load immediate (32-bit) 
+  # Call subroutine to modify content at value1
+  li a1, value1           # a1 holds the address argument
+  jal change_value        # call subroutine, return address stored in ra
 
-   li a2, offset           # load offset address to a2
-   sw a1, (a2)             # save a1 into the memory location specified by a2
-   lw a3, (a2)             # load word (32-bit) from mem
-   lh a4, (a2)             # load half word (16-bit) from mem
-   lb a5, (a2)             # load byte (8-bit) from mem  
+  # Call subroutine to modify content at value2
+  li a1, value2
+  jal change_value
 
-   mv a2, a1              # copy a1 to a2
-   mv a1, x0              # clear a1. x0 is always '0'   
- ret
+  # Repeat forever to observe repeated calls/returns
+  j asm_main
+
+change_value:
+  # Operate on the value stored at the address in a1
+  lw a3, 0(a1)            # load word from memory location
+  addi a3, a3, 1          # increment the content
+  xori a4, a3, 0xAF       # XOR with 0xAF (arbitrary mask)
+  and  a3, a4, a3         # AND mask with previous result
+  sw a3, 0(a1)            # save the result back to memory
+  ret                     # return to caller (jalr x0, 0(ra))
