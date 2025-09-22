@@ -48,6 +48,22 @@
 			"problemMatcher": ["$gcc"]
 		},
 		{
+			"label": "PIO: Build Lab1 ASM Part 3",
+			"type": "shell",
+			"command": "${workspaceFolder}/.venv/Scripts/python.exe",
+			"args": ["-m", "platformio", "run", "-e", "lab1-asm-part3"],
+			"group": "build",
+			"problemMatcher": ["$gcc"]
+		},
+		{
+			"label": "PIO: Upload Lab1 ASM Part 3",
+			"type": "shell",
+			"command": "${workspaceFolder}/.venv/Scripts/python.exe",
+			"args": ["-m", "platformio", "run", "-e", "lab1-asm-part3", "-t", "upload"],
+			"group": "build",
+			"problemMatcher": ["$gcc"]
+		},
+		{
 			"label": "PIO: Upload Blink",
 			"type": "shell",
 			"command": "${workspaceFolder}/.venv/Scripts/python.exe",
