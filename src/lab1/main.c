@@ -16,6 +16,9 @@
 
 static inline volatile uint32_t* REG(uint32_t base, uint32_t off) { return (volatile uint32_t*)(base + off); }
 
+// Optional: assembly entry; link-safe if not present in some builds
+extern void asm_main(void);
+
 static void uart_init(uint32_t baud)
 {
     // Route UART0 pins to IOF (GPIO16=RX, GPIO17=TX on HiFive1-RevB default)
@@ -57,21 +60,30 @@ static int uart_read_byte_nonblock(uint8_t* out)
     return 1;
 }
 
+// Lab-style API wrappers
+void setupUART(void) { uart_init(115200); }
+unsigned char UART_read(void)
+{
+    uint8_t ch;
+    while (!uart_read_byte_nonblock(&ch)) { /* spin */ }
+    return ch;
+}
+void UART_write(unsigned char a) { uart_write_byte((uint8_t)a); }
+
 int main(void)
 {
-    uart_init(115200);
+    setupUART();
 
-    // Simple echo: read when available and echo back
+    // Optionally call into assembly once (harmless demo); comment out if undesired
+    // asm_main();
+
     for (;;) {
-        uint8_t ch;
-        if (uart_read_byte_nonblock(&ch)) {
-            // Add simple CRLF handling: convert '\r' to '\r\n'
-            if (ch == '\r') {
-                uart_write_byte('\r');
-                uart_write_byte('\n');
-            } else {
-                uart_write_byte(ch);
-            }
+        unsigned char ch = UART_read();
+        if (ch == '\r') {
+            UART_write('\r');
+            UART_write('\n');
+        } else {
+            UART_write(ch);
         }
     }
 }
