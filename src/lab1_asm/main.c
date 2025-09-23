@@ -1,10 +1,10 @@
-// Lab 1 Part 1: C main that repeatedly calls asm_main (matches lab snippet)
-#include <stdio.h>
-void asm_main();
+// Minimal C entry that repeatedly calls the assembly demo
+extern void asm_main(void);
 
-int main()
+int main(void)
 {
-    while (1)
+    for(;;) {
         asm_main();
-    return 1;
+    }
+    return 0;
 }
