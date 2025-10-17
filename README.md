@@ -1,15 +1,6 @@
 Superblink
 =========
 
-Tiny PlatformIO project for an embedded systems lab (ECE395 Lab 1).
-
-Summary
--------
-This project implements a simple LED blink exercise for a microcontroller (used as part of ECE395 Lab 1). It contains assembly and C source files that initialize the hardware and blink an LED using timer or GPIO code. The original lab PDF provides background on timers, GPIO configuration, and the expected behavior (periodic LED toggling).
-
-Superblink
-=========
-
 Tiny PlatformIO project for an embedded-systems lab (ECE395 Lab 1).
 
 Summary
